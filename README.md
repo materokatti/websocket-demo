@@ -18,8 +18,8 @@ A real-time chat application built with Node.js, Express, and Socket.io that dem
 
 1. Clone the repository:
 ```bash
-git clone <your-repository-url>
-cd <your-repository-name>
+git clone https://github.com/materokatti/websocket-demo.git
+cd websocket-demo
 ```
 
 2. Install dependencies:
