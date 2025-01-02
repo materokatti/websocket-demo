@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>WebSocket.io Chat Demo</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+
+        #chat-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        #messages {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            height: 400px;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            margin-bottom: 20px;
+            padding: 10px;
+        }
+
+        #messages li {
+            padding: 5px 10px;
+        }
+
+        #messages li:nth-child(odd) {
+            background: #f1f1f1;
+        }
+
+        .input-container {
+            display: flex;
+            gap: 10px;
+        }
+
+        input {
+            padding: 10px;
+            flex-grow: 1;
+        }
+
+        button {
+            padding: 10px 20px;
+            background: #0056b3;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #003d82;
+        }
+
+        .system-message {
+            color: #666;
+            font-style: italic;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="chat-container">
+        <h2>WebSocket.io Chat Demo</h2>
+        <div id="user-count">Connected users: 0</div>
+        <ul id="messages"></ul>
+        <div class="input-container">
+            <input id="message-input" autocomplete="off" placeholder="Type your message..." />
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        // Connect to WebSocket server
+        const socket = io();
+
+        // Prompt for username when connecting
+        const username = prompt('Please enter your username:');
+        socket.emit('new user', username);
+
+        // Send message function
+        function sendMessage() {
+            const input = document.getElementById('message-input');
+            if (input.value) {
+                socket.emit('chat message', input.value);
+                input.value = '';
+            }
+        }
+
+        // Listen for Enter key
+        document.getElementById('message-input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // Handle incoming messages
+        socket.on('chat message', (data) => {
+            const messages = document.getElementById('messages');
+            const li = document.createElement('li');
+            li.textContent = `${data.timestamp} - ${data.username}: ${data.message}`;
+            messages.appendChild(li);
+            messages.scrollTop = messages.scrollHeight;
+        });
+
+        // Handle user joined notification
+        socket.on('user joined', (data) => {
+            const messages = document.getElementById('messages');
+            const li = document.createElement('li');
+            li.textContent = `${data.username} joined the chat`;
+            li.className = 'system-message';
+            messages.appendChild(li);
+            document.getElementById('user-count').textContent = `Connected users: ${data.userCount}`;
+        });
+
+        // Handle user left notification
+        socket.on('user left', (data) => {
+            const messages = document.getElementById('messages');
+            const li = document.createElement('li');
+            li.textContent = `${data.username} left the chat`;
+            li.className = 'system-message';
+            messages.appendChild(li);
+            document.getElementById('user-count').textContent = `Connected users: ${data.userCount}`;
+        });
+    </script>
+</body>
+
+</html>
