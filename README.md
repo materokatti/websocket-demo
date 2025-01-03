@@ -3,7 +3,7 @@ A real-time chat application built with Node.js, Express, and Socket.io that dem
 
 ## Project screen example
 <p align="center">
-  <img width="635" alt="Screenshot 2025-01-02 at 2 12 55 PM" src="https://github.com/user-attachments/assets/edbd72c3-d987-447b-9118-8729df0e5b6d" style="border: 2px solid grey;" />
+  <img width="635" alt="Screenshot 2025-01-02 at 2 12 55 PM" src="https://github.com/user-attachments/assets/edbd72c3-d987-447b-9118-8729df0e5b6d" />
 </p>
 
 
